@@ -22,7 +22,7 @@ func main() {
 	//creating commnand-line flags that
 	//1) defines a port to be used in env and
 	//2) define DB connection string
-	addr := flag.String("addr", ":4000", "HTTP network address")
+	port := flag.String("port", ":4000", "HTTP network port")
 	dsn := flag.String("dsn", "web:pass@/snippetbox?parseTime=true", "MySQL data source name")
 	flag.Parse()
 
@@ -57,9 +57,9 @@ func main() {
 		templateCache: templateCache,
 	}
 
-	logger.Info("Starting server", "port", *addr)
+	logger.Info("Starting server", "port", *port)
 
-	err = http.ListenAndServe(*addr, app.routes())
+	err = http.ListenAndServe(*port, app.routes())
 	logger.Error(err.Error())
 	os.Exit(1)
 }
