@@ -1,32 +1,29 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
+
+	"snippetbox.art.net/cmd/internal/models"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Server:", "Austin, TX")
 
-	files := []string{
-		"../../ui/html/base.html",
-		"../../ui/html/partials/nav.html",
-		"../../ui/html/pages/home.html",
-	}
+	snippets, err := app.snippets.Latest()
 
-	tmpl, err := template.ParseFiles(files...)
 	if err != nil {
 		app.serverError(w, r, err)
 		return
 	}
 
-	err = tmpl.ExecuteTemplate(w, "base", nil)
-	if err != nil {
-		app.serverError(w, r, err)
-		return
+	data := templateData{
+		Snippets: snippets,
 	}
+
+	app.render(w, r, http.StatusOK, "home.html", data)
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
@@ -36,9 +33,23 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
 
-	fmt.Fprintf(w, `{"snippet id:" : "%v"}`, snippetId)
+	snippet, err := app.snippets.Get(val)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	data := templateData{
+		Snippet: snippet,
+	}
+
+	app.render(w, r, http.StatusOK, "view.html", data)
+
 }
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
