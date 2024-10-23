@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"runtime/debug"
+  "time"
+  "bytes"
 )
 
 func (app *application) serverError(w http.ResponseWriter, r *http.Request, err error) {
@@ -28,13 +30,22 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, status in
 		app.serverError(w, r, err)
 		return
 	}
+  //buffer used to pre-load the page and catch any errors
+  //prior to writing through ResponseWriter
+  buf := new(bytes.Buffer)
+  err := ts.ExecuteTemplate(buf, "base", data)
+  
+  if err != nil {
+    app.serverError(w, r, err)
+    return
+  }
 
-	w.WriteHeader(status)
+  w.WriteHeader(status)
+  buf.WriteTo(w)
+}
 
-	err := ts.ExecuteTemplate(w, "base", data)
-
-	if err != nil {
-		app.serverError(w, r, err)
-	}
-
+func (app *application) newTemplateData(r *http.Request) templateData {
+  return templateData{
+    CurrentYear: time.Now().Year(),
+  }
 }
