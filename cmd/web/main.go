@@ -55,7 +55,7 @@ func main() {
 	sessionManager := scs.New()
 	sessionManager.Store = mysqlstore.New(db)
 	sessionManager.Lifetime = 12 * time.Hour
-
+	sessionManager.Cookie.Secure = true
 	//structured logger definition
 	//JSON logger syntax with debug level enabled and source of log
 	jsonLogger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
@@ -80,7 +80,7 @@ func main() {
 
 	logger.Info("Starting server", "port", *port)
 
-	err = server.ListenAndServe()
+	err = server.ListenAndServeTLS("./tls/cert.pem", "./tls/key.pem")
 	logger.Error(err.Error())
 	os.Exit(1)
 }
