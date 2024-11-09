@@ -12,7 +12,7 @@ func (app *application) routes() http.Handler {
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	mux.Handle("GET /static/", http.StripPrefix("/static", fileServer))
 
-	dynamicMiddleware := alice.New(app.sessionManager.LoadAndSave)
+	dynamicMiddleware := alice.New(app.sessionManager.LoadAndSave, app.noSurf, app.authenticate)
 	mux.Handle("GET /{$}", dynamicMiddleware.ThenFunc(app.home))
 	mux.Handle("GET /snippet/view/{snippetId}", dynamicMiddleware.ThenFunc(app.snippetView))
 	mux.Handle("GET /user/signup", dynamicMiddleware.ThenFunc(app.userSignup))

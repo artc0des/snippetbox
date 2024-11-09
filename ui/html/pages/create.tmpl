@@ -2,7 +2,8 @@
 
 {{define "main"}}
     <form action='/snippet/create' method='POST'>
-            <div>
+        <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
+        <div>
             <label>Title:</label>
             {{with .Form.FieldErrors.title}}
                 <label class='error'>{{.}}</label>
