@@ -6,10 +6,8 @@ import (
 	"fmt"
 	"net/http"
 	"runtime/debug"
-	"time"
 
 	"github.com/go-playground/form/v4"
-	"github.com/justinas/nosurf"
 )
 
 func (app *application) serverError(w http.ResponseWriter, r *http.Request, err error) {
@@ -20,6 +18,12 @@ func (app *application) serverError(w http.ResponseWriter, r *http.Request, err 
 	)
 
 	app.logger.Error(err.Error(), "method", method, "uri", uri, "trace", stack)
+
+	if app.debug {
+		val := fmt.Sprintf("%s\n%s", err, stack)
+		http.Error(w, val, http.StatusInternalServerError)
+		return
+	}
 	http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 }
 
@@ -46,15 +50,6 @@ func (app *application) render(w http.ResponseWriter, r *http.Request, status in
 
 	w.WriteHeader(status)
 	buf.WriteTo(w)
-}
-
-func (app *application) newTemplateData(r *http.Request) templateData {
-	return templateData{
-		CurrentYear:     time.Now().Year(),
-		Flash:           app.sessionManager.PopString(r.Context(), "flash"),
-		IsAuthenticated: app.isAuthenticated(r),
-		CSRFToken:       nosurf.Token(r),
-	}
 }
 
 func (app *application) decodePostForm(r *http.Request, dst any) error {

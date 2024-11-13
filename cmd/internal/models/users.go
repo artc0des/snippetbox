@@ -10,6 +10,12 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type UserModelInterface interface {
+	Insert(userId, name, email, password string) error
+	Authenticate(email, password string) (string, error)
+	Exists(id string) (bool, error)
+	Get(userId string) (User, error)
+}
 type User struct {
 	Id             string
 	Name           string
@@ -78,4 +84,23 @@ func (um *UserModel) Exists(userId string) (bool, error) {
 
 	err := um.DB.QueryRow(stmt, userId).Scan(&exists)
 	return exists, err
+}
+
+func (um *UserModel) Get(userId string) (User, error) {
+	query := `SELECT id, name, email, hash_password, created FROM users WHERE id = ?`
+
+	row := um.DB.QueryRow(query, userId)
+
+	user := User{}
+
+	err := row.Scan(&user.Id, &user.Name, &user.Email, &user.Hashedpassword, &user.Create)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return User{}, ErrNoRecord
+		} else {
+			return User{}, err
+		}
+	}
+
+	return user, nil
 }

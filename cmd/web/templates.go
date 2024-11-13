@@ -2,10 +2,12 @@ package main
 
 import (
 	"io/fs"
+	"net/http"
 	"path/filepath"
 	"text/template"
 	"time"
 
+	"github.com/justinas/nosurf"
 	"snippetbox.art.net/cmd/internal/models"
 	"snippetbox.art.net/ui"
 )
@@ -13,6 +15,7 @@ import (
 type templateData struct {
 	Snippet         models.Snippet
 	Snippets        []models.Snippet
+	User            models.User
 	CurrentYear     int
 	Form            any
 	Flash           string
@@ -57,4 +60,13 @@ func newTemplateCache() (map[string]*template.Template, error) {
 	}
 
 	return cache, nil
+}
+
+func (app *application) newTemplateData(r *http.Request) templateData {
+	return templateData{
+		CurrentYear:     time.Now().Year(),
+		Flash:           app.sessionManager.PopString(r.Context(), "flash"),
+		IsAuthenticated: app.isAuthenticated(r),
+		CSRFToken:       nosurf.Token(r),
+	}
 }

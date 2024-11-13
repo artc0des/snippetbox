@@ -18,12 +18,13 @@ import (
 )
 
 type application struct {
-	snippets       *models.SnippetModel
-	users          *models.UserModel
+	snippets       models.SnippetModelInterface
+	users          models.UserModelInterface
 	logger         *slog.Logger
 	templateCache  map[string]*template.Template
 	formDecoder    *form.Decoder
 	sessionManager *scs.SessionManager
+	debug          bool
 }
 
 func main() {
@@ -32,8 +33,10 @@ func main() {
 	//2) define DB connection string
 	port := flag.String("port", ":4000", "HTTP network port")
 	dsn := flag.String("dsn", "web:pass@/snippetbox?parseTime=true", "MySQL data source name")
+	debug := flag.Bool("debug", false, "enable debug mode in the ui")
 	flag.Parse()
 
+	//logger init
 	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	//database connection setup
 	db, err := openDB(*dsn)
@@ -73,12 +76,15 @@ func main() {
 		templateCache:  templateCache,
 		formDecoder:    formDecoder,
 		sessionManager: sessionManager,
+		debug:          *debug,
 	}
 
+	//HTTPS cert configuration settings
 	tlsConfig := &tls.Config{
 		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
 	}
 
+	//custom server init
 	server := &http.Server{
 		Addr:         *port,
 		Handler:      app.routes(),

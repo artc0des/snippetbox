@@ -14,6 +14,7 @@ func (app *application) routes() http.Handler {
 
 	dynamicMiddleware := alice.New(app.sessionManager.LoadAndSave, app.noSurf, app.authenticate)
 	mux.Handle("GET /{$}", dynamicMiddleware.ThenFunc(app.home))
+	mux.Handle("GET /about", dynamicMiddleware.ThenFunc(app.about))
 	mux.Handle("GET /snippet/view/{snippetId}", dynamicMiddleware.ThenFunc(app.snippetView))
 	mux.Handle("GET /user/signup", dynamicMiddleware.ThenFunc(app.userSignup))
 	mux.Handle("POST /user/signup", dynamicMiddleware.ThenFunc(app.userSignupPost))
@@ -24,6 +25,7 @@ func (app *application) routes() http.Handler {
 	mux.Handle("GET /snippet/create", protectedMiddleware.ThenFunc(app.snippetCreate))
 	mux.Handle("POST /snippet/create", protectedMiddleware.ThenFunc(app.snippetCreatePost))
 	mux.Handle("POST /user/logout", protectedMiddleware.ThenFunc(app.userLogoutPost))
+	mux.Handle("GET /user/account", protectedMiddleware.ThenFunc(app.account))
 
 	//middleware being called prior to incoming requests and outbound requests
 	standardMiddleware := alice.New(app.recoverPanic, app.logRequest, commonHeaders)
