@@ -33,3 +33,7 @@ func (m *UserModel) Exists(id string) (bool, error) {
 func (m *UserModel) Get(userId string) (models.User, error) {
 	return models.User{}, nil
 }
+
+func (m *UserModel) UpdatePassword(userId, updatedPassword string) error {
+	return nil
+}

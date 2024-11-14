@@ -26,6 +26,8 @@ func (app *application) routes() http.Handler {
 	mux.Handle("POST /snippet/create", protectedMiddleware.ThenFunc(app.snippetCreatePost))
 	mux.Handle("POST /user/logout", protectedMiddleware.ThenFunc(app.userLogoutPost))
 	mux.Handle("GET /user/account", protectedMiddleware.ThenFunc(app.account))
+	mux.Handle("GET /user/account/update", protectedMiddleware.ThenFunc(app.accountUpdate))
+	mux.Handle("POST /user/account/update", protectedMiddleware.ThenFunc(app.accountUpdatePost))
 
 	//middleware being called prior to incoming requests and outbound requests
 	standardMiddleware := alice.New(app.recoverPanic, app.logRequest, commonHeaders)

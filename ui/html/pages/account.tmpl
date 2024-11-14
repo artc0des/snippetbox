@@ -1,6 +1,13 @@
 {{define "title"}}Your Account{{end}}
 {{define "main"}}
-    <h2>Your Account</h2>
+    <nav>
+        <div>
+            <p>Your Account</p>
+        </div>
+        <div>
+           <a href='/user/account/update'>Update Password</a> 
+        </div>
+    </nav>
     {{with .User}}
         <table>
             <tr>

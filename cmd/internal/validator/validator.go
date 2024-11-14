@@ -5,6 +5,8 @@ import (
 	"slices"
 	"strings"
 	"unicode/utf8"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 var EmailRX = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
@@ -55,4 +57,17 @@ func MinChars(value string, n int) bool {
 
 func Matches(value string, rx *regexp.Regexp) bool {
 	return rx.MatchString(value)
+}
+
+func PasswordMatch(currentPass, inputPass string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(currentPass), []byte(inputPass))
+
+	if err != nil {
+		return false
+	}
+	return true
+}
+
+func SameInputMatch(firstInput, secondInput string) bool {
+	return firstInput == secondInput
 }
