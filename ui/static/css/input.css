@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-snippet {
+    background-image: linear-gradient(to right top, #9a031e, #ae2620, #c23e22, #d55523, #e66c23, #eb7322, #f07a21, #f58120, #f17a1d, #ec731a, #e86b17, #e36414);
+    background-repeat: no-repeat;
+}

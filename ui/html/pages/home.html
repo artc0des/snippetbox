@@ -1,0 +1,27 @@
+{{define "title"}}Home{{end}}
+
+{{define "main"}}
+    <section id="home" class="flex flex-col justify-center">
+    <h2 class="text-center font-bold md:text-2xl md:pb-10">Latest Snippets</h2>
+    {{if .Snippets}}
+    <div class="flex flex-col shadow-lg shadow-black bg-[#0f4c5c] rounded-lg md:p-10 md:mx-20">
+    <table>
+        <tr class="text-left font-bold text-2xl text-[#ced4da]">
+            <th>Title</th>
+            <th>Created</th>
+            <th>ID</th>
+        </tr>
+        {{range .Snippets}}
+        <tr class="text-left text-xl text-[#ced4da] hover:text-[#fb8b24]">
+            <td><a href='/snippet/view/{{.ID}}'>{{.Title}}</a></td>
+            <td>{{humanDate .Created}}</td>
+            <td>#{{.ID}}</td>
+        </tr>
+        {{end}}
+    </table>
+    </div>
+    {{else}}
+        <p>No snippets have been created yet...</p>
+    {{end}}
+    </section>
+{{end}}

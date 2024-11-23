@@ -38,17 +38,16 @@ var functions = template.FuncMap{
 func newTemplateCache() (map[string]*template.Template, error) {
 	cache := make(map[string]*template.Template)
 
-	pages, err := fs.Glob(ui.Files, "html/pages/*.tmpl")
+	pages, err := fs.Glob(ui.Files, "html/pages/*.html")
 	if err != nil {
 		return nil, err
 	}
 
 	for _, page := range pages {
 		name := filepath.Base(page)
-
 		patterns := []string{
-			"html/base.tmpl",
-			"html/partials/*.tmpl",
+			"html/base.html",
+			"html/partials/*.html",
 			page,
 		}
 		ts, err := template.New(name).Funcs(functions).ParseFS(ui.Files, patterns...)

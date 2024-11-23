@@ -49,7 +49,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
 	data.Snippets = snippets
 
-	app.render(w, r, http.StatusOK, "home.tmpl", data)
+	app.render(w, r, http.StatusOK, "home.html", data)
 }
 
 func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
@@ -72,7 +72,7 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 
 	data := app.newTemplateData(r)
 	data.Snippet = snippet
-	app.render(w, r, http.StatusOK, "view.tmpl", data)
+	app.render(w, r, http.StatusOK, "view.html", data)
 
 }
 
@@ -82,7 +82,7 @@ func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 		Expires: 365,
 	}
 
-	app.render(w, r, http.StatusOK, "create.tmpl", data)
+	app.render(w, r, http.StatusOK, "create.html", data)
 }
 
 func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request) {
@@ -103,7 +103,7 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 	if !form.Validator.NoErrors() {
 		data := app.newTemplateData(r)
 		data.Form = form
-		app.render(w, r, http.StatusUnprocessableEntity, "create.tmpl", data)
+		app.render(w, r, http.StatusUnprocessableEntity, "create.html", data)
 		return
 	}
 
@@ -121,7 +121,7 @@ func (app *application) snippetCreatePost(w http.ResponseWriter, r *http.Request
 func (app *application) userSignup(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
 	data.Form = userSignupForm{}
-	app.render(w, r, http.StatusOK, "signup.tmpl", data)
+	app.render(w, r, http.StatusOK, "signup.html", data)
 }
 
 func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
@@ -142,7 +142,7 @@ func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
 	if !form.NoErrors() {
 		data := app.newTemplateData(r)
 		data.Form = form
-		app.render(w, r, http.StatusUnprocessableEntity, "signup.tmpl", data)
+		app.render(w, r, http.StatusUnprocessableEntity, "signup.html", data)
 		return
 	}
 
@@ -154,7 +154,7 @@ func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
 
 			data := app.newTemplateData(r)
 			data.Form = form
-			app.render(w, r, http.StatusUnprocessableEntity, "signup.tmpl", data)
+			app.render(w, r, http.StatusUnprocessableEntity, "signup.html", data)
 		} else {
 			app.serverError(w, r, err)
 		}
@@ -168,7 +168,7 @@ func (app *application) userSignupPost(w http.ResponseWriter, r *http.Request) {
 func (app *application) userLogin(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
 	data.Form = userLoginForm{}
-	app.render(w, r, http.StatusOK, "login.tmpl", data)
+	app.render(w, r, http.StatusOK, "login.html", data)
 }
 
 func (app *application) userLoginPost(w http.ResponseWriter, r *http.Request) {
@@ -187,7 +187,7 @@ func (app *application) userLoginPost(w http.ResponseWriter, r *http.Request) {
 	if !form.NoErrors() {
 		data := app.newTemplateData(r)
 		data.Form = form
-		app.render(w, r, http.StatusUnprocessableEntity, "login.tmpl", data)
+		app.render(w, r, http.StatusUnprocessableEntity, "login.html", data)
 		return
 	}
 
@@ -199,7 +199,7 @@ func (app *application) userLoginPost(w http.ResponseWriter, r *http.Request) {
 
 			data := app.newTemplateData(r)
 			data.Form = form
-			app.render(w, r, http.StatusUnprocessableEntity, "login.tmpl", data)
+			app.render(w, r, http.StatusUnprocessableEntity, "login.html", data)
 		} else {
 			app.serverError(w, r, err)
 		}
@@ -238,7 +238,7 @@ func ping(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) about(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
-	app.render(w, r, http.StatusOK, "about.tmpl", data)
+	app.render(w, r, http.StatusOK, "about.html", data)
 }
 
 func (app *application) account(w http.ResponseWriter, r *http.Request) {
@@ -256,13 +256,13 @@ func (app *application) account(w http.ResponseWriter, r *http.Request) {
 
 	data := app.newTemplateData(r)
 	data.User = user
-	app.render(w, r, http.StatusOK, "account.tmpl", data)
+	app.render(w, r, http.StatusOK, "account.html", data)
 }
 
 func (app *application) accountUpdate(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
 	data.Form = accountUpdateForm{}
-	app.render(w, r, http.StatusOK, "changepass.tmpl", data)
+	app.render(w, r, http.StatusOK, "changepass.html", data)
 }
 
 func (app *application) accountUpdatePost(w http.ResponseWriter, r *http.Request) {
@@ -283,7 +283,7 @@ func (app *application) accountUpdatePost(w http.ResponseWriter, r *http.Request
 	if !form.NoErrors() {
 		data := app.newTemplateData(r)
 		data.Form = form
-		app.render(w, r, http.StatusUnprocessableEntity, "changepass.tmpl", data)
+		app.render(w, r, http.StatusUnprocessableEntity, "changepass.html", data)
 		return
 	}
 
@@ -305,7 +305,7 @@ func (app *application) accountUpdatePost(w http.ResponseWriter, r *http.Request
 	if !form.NoErrors() {
 		data := app.newTemplateData(r)
 		data.Form = form
-		app.render(w, r, http.StatusUnprocessableEntity, "changepass.tmpl", data)
+		app.render(w, r, http.StatusUnprocessableEntity, "changepass.html", data)
 		return
 	}
 
@@ -317,7 +317,7 @@ func (app *application) accountUpdatePost(w http.ResponseWriter, r *http.Request
 
 			data := app.newTemplateData(r)
 			data.Form = form
-			app.render(w, r, http.StatusUnprocessableEntity, "login.tmpl", data)
+			app.render(w, r, http.StatusUnprocessableEntity, "login.html", data)
 		} else {
 			app.serverError(w, r, err)
 		}

@@ -1,0 +1,26 @@
+{{define "nav"}}
+    <nav class="flex flex-col text-2xl md:flex-row md:py-8 md:px-20 md:mb-10 md:justify-between bg-[#fb8b24]">
+        <div class="space-x-10">
+            <a href='/' class="hover:text-[#0f4c5c]">Home</a>
+            {{if .IsAuthenticated}}
+            <a href='/snippet/create' class="hover:text-[#0f4c5c]">Create Snippet</a>
+            {{end}}
+            <a href='/about' class="hover:text-[#0f4c5c]">About</a>
+        </div>
+        <div class="space-x-10">
+            {{if .IsAuthenticated}}
+                <div class="flex space-x-10">
+                <a href='/user/account' class="hover:text-[#0f4c5c]">Account</a>
+                
+                <form action='/user/logout' method='POST'>
+                    <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
+                    <button class="hover:text-[#0f4c5c]">Logout</button>
+                </form>
+                </div>
+            {{else}}
+                <a href='/user/signup' class="hover:text-[#0f4c5c]">Signup</a>
+                <a href='/user/login' class="hover:text-[#0f4c5c]">Login</a>
+            {{end}}
+        </div>
+    </nav>
+{{end}}

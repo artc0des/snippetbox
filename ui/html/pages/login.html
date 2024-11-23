@@ -1,0 +1,42 @@
+{{define "title"}}Login{{end}}
+
+{{define "main"}}
+<section id="login" class="flex justify-center py-10 mx-96 mb-10 rounded-lg shadow-lg shadow-black bg-[#0f4c5c]">
+    <form action='/user/login' method='POST' novalidate>
+        <input type='hidden' name='csrf_token' value='{{.CSRFToken}}'>
+        <div class="space-y-12">
+        <div class="border-b border-gray-900/10 pb-12">
+        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="sm:col-span-4">
+                <label for="email" class="block text-sm/6 font-medium text-white">Email</label>
+                {{with .Form.FieldErrors.name}}
+                    <label class='error text-white font-bold'>{{.}}</label>
+                {{end}}
+                <div class="mt-2">
+                    <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#fb8b24] sm:max-w-md">
+                        <input type="email" name="email" value='{{.Form.Email}}' id="email" autocomplete="email" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm/6">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <div class="sm:col-span-4">
+                <label for="password" class="block text-sm/6 font-medium text-white">Password</label>
+                {{with .Form.FieldErrors.password}}
+                    <label class='error text-white font-bold'>{{.}}</label>
+                {{end}}
+                <div class="mt-2">
+                    <div class="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#fb8b24] sm:max-w-md">
+                        <input type="password" name="password" id="password" class="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-white placeholder:text-gray-400 focus:ring-0 sm:text-sm/6">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="mt-6 flex items-center justify-center gap-x-6">
+            <button type="submit" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-black shadow-sm hover:bg-[#fb8b24] duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fb8b24]">Login</button>
+        </div>
+        </div>
+        </form>
+    </section>
+{{end}}
